@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App de Inicio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .pantalla {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 24px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      animation: entrada 0.8s ease;
+    }
+
+    .imagen-principal {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 24px;
+      display: block;
+      margin: 0 auto 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.9;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .botones {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: scale(0.98); }
+
+    .btn-principal {
+      background: #22c55e;
+      color: white;
+    }
+
+    .btn-secundario {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .estado {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      min-height: 20px;
+    }
+
+    @keyframes entrada {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="card">
+      <!-- CAMBIA ESTA RUTA POR LA DE TU IMAGEN EN EL REPOSITORIO -->
+      <img id="imagenInicio" class="imagen-principal" src="./imagen-inicio.jpg" alt="Imagen principal" />
+
+      <h1>Bienvenido</h1>
+      <p>Al abrir la app se mostrará tu imagen y se reproducirá tu música.</p>
+
+      <div class="botones">
+        <button class="btn-principal" id="btnIniciar">Reproducir música</button>
+        <button class="btn-secundario" id="btnDetener">Detener música</button>
+      </div>
+
+      <div class="estado" id="estado">Listo para iniciar</div>
+    </div>
+  </div>
+
+  <!-- CAMBIA ESTA RUTA POR LA DE TU AUDIO EN EL REPOSITORIO -->
+  <audio id="musicaFondo" loop>
+    <source src="./musica-inicio.mp3" type="audio/mpeg" />
+    Tu navegador no soporta audio.
+  </audio>
+
+  <script>
+    const musica = document.getElementById('musicaFondo');
+    const btnIniciar = document.getElementById('btnIniciar');
+    const btnDetener = document.getElementById('btnDetener');
+    const estado = document.getElementById('estado');
+
+    async function reproducirMusica() {
+      try {
+        await musica.play();
+        estado.textContent = 'Música reproduciéndose';
+      } catch (error) {
+        estado.textContent = 'El navegador bloqueó el autoplay. Toca el botón para iniciar.';
+        console.error('No se pudo reproducir automáticamente:', error);
+      }
+    }
+
+    btnIniciar.addEventListener('click', reproducirMusica);
+
+    btnDetener.addEventListener('click', () => {
+      musica.pause();
+      musica.currentTime = 0;
+      estado.textContent = 'Música detenida';
+    });
+
+    window.addEventListener('load', () => {
+      // Intenta reproducir al abrir.
+      // En muchos celulares/navegadores necesitará toque del usuario.
+      reproducirMusica();
+    });
+  </script>
+</body>
+</html>
